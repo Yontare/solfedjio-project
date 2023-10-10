@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from model import Level
+from models import Level
 from schemas import LevelSchema
 
 
@@ -19,4 +19,3 @@ def remove_level(db: Session, level_id: int):
     _level = get_level_by_id(db, level_id)
     db.delete(_level)
     db.commit()
-

@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from config import engine
-import model
+import models
 import router
 
-model.Base.metadata.create_all(bind=engine)
-
 app = FastAPI()
+app.include_router(router.router, prefix="/level", tags=["level"])
+model.Base.metadata.create_all(bind=engine)
 
 
 @app.get("/home")
@@ -16,5 +16,3 @@ async def root():
 @app.get("/hello/{name}")
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
-
-app.include_router(router.router, prefix="/level", tags=["level"])

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "Running database..."
 docker start postgres
 sleep 1
