@@ -5,7 +5,7 @@ import router
 
 app = FastAPI()
 app.include_router(router.router, prefix="/level", tags=["level"])
-model.Base.metadata.create_all(bind=engine)
+models.Base.metadata.create_all(bind=engine)
 
 
 @app.get("/home")
