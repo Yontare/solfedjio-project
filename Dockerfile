@@ -1,8 +1,8 @@
-FROM python:3.9-alpine
+FROM python:3.11-alpine
 
 EXPOSE 8000
 
-WORKDIR /code/src/solfedjio-project
+WORKDIR /code/src/solfedjio_project
 
 RUN pip install --upgrade pip
 RUN apk add gcc musl-dev libffi-dev
