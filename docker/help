@@ -11,7 +11,7 @@ docker network rm solfedjio-network
 
 docker network connect --ip 172.28.1.2 solfedjio-network solfedjio
 
-docker run -p 8000:8000 --name solfedjio -e DB_URL=postgresql://postgres:postgres@172.28.1.1:5432/solfedjio-db solfedjio
+docker run -p 8000:8000 --name solfedjio -e DB_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/solfedjio_db
 
 
 

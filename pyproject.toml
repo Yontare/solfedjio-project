@@ -6,12 +6,16 @@ authors = ["yontare"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.11"
 fastapi = "^0.103.2"
 sqlalchemy = "^2.0.21"
 uvicorn = "^0.23.2"
 pydantic-settings = "^2.0.3"
+asyncpg = "^0.28.0"
+fastapi-users = "^12.1.2"
+fastapi-users-db-sqlalchemy = "^6.0.1"
 psycopg2-binary = "^2.9.9"
+asyncio = "^3.4.3"
 
 
 [build-system]

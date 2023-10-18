@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from config import Base
+from db.db_config import Base
 
 
 class Level(Base):
