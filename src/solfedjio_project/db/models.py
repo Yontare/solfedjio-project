@@ -21,6 +21,11 @@ class TaskType(enum.Enum):
     three = "three"
 
 
+class AttachmentType(enum.Enum):
+    photo = "photo"
+    audio = "audio"
+
+
 class Task(Base):
     __tablename__ = 'task'
 
@@ -28,6 +33,7 @@ class Task(Base):
     text: Mapped[str] = mapped_column(nullable=True)
     type: Mapped[TaskType] = mapped_column(nullable=False, default=TaskType.one)
     attachments: Mapped[List["Attachment"]] = relationship(cascade="all, delete-orphan", lazy="selectin")
+    answers: Mapped[List["Answer"]] = relationship(cascade="all, delete-orphan", lazy="selectin")
     level_id: Mapped[int] = mapped_column(ForeignKey("level.id"))
 
 
@@ -36,4 +42,14 @@ class Attachment(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     path: Mapped[str]
+    type: Mapped[AttachmentType]
+    task_id: Mapped[int] = mapped_column(ForeignKey("task.id"))
+
+
+class Answer(Base):
+    __tablename__ = 'answer'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    text: Mapped[str]
+    is_right: Mapped[bool]
     task_id: Mapped[int] = mapped_column(ForeignKey("task.id"))
