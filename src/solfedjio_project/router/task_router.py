@@ -14,7 +14,7 @@ current_user = fastapi_users.current_user()
 @task_router.post('/create', status_code=status.HTTP_201_CREATED)
 async def create(req: RequestTask, session: AsyncSession = Depends(get_async_session),
                  user: User = Depends(current_user)):
-    task_schema = TaskSchema.model_validate(await crud.create_task(task=req.parameter, session=session))
+    task_schema = TaskSchema.model_validate(await crud.create_task(task_schema=req.parameter, session=session))
     return ResponseSchema(status="OK", message="Task created successfully", result=task_schema)
 
 
