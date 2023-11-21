@@ -10,6 +10,11 @@ level_router = APIRouter()
 current_user = fastapi_users.current_user()
 
 
+@level_router.get('/check_permissions')
+async def check_permissions(user: User = Depends(current_user)):
+    return ResponseSchema(code=200, status="OK", message="Successfully check permissions")
+
+
 @level_router.post('/create', status_code=status.HTTP_201_CREATED)
 async def create(req: RequestLevel, session: AsyncSession = Depends(get_async_session),
                  user: User = Depends(current_user)):
