@@ -32,6 +32,7 @@ class AttachmentSchema(BaseModel):
 class TaskSchema(BaseModel):
     id: Optional[int] = None
     text: Optional[str] = None
+    description: Optional[str] = None
     type: Optional[TaskType] = None
     attachments: list[AttachmentSchema] | None = None
     answers: list[AnswerSchema] | None = None
