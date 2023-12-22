@@ -1,4 +1,4 @@
-from sqlalchemy import select, text, exists, and_
+from sqlalchemy import select, text, exists, and_, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.db_config import User
@@ -9,6 +9,11 @@ from schema.schemas import ShortLevelSchema, LevelSchema, TaskSchema, LevelOrder
 async def get_level_by_id(level_id: int, session: AsyncSession):
     result = await session.execute(select(Level).where(Level.id == level_id))
     return result.scalars().one()
+
+
+async def get_random_tasks(session: AsyncSession):
+    tasks = await session.execute(select(Task).order_by(func.random()).limit(7))
+    return tasks.scalars()
 
 
 async def get_levels(order: LevelOrderField, user: User, session: AsyncSession):
