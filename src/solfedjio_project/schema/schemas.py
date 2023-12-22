@@ -53,6 +53,7 @@ class LevelSchema(BaseModel):
 class ShortLevelSchema(BaseModel):
     id: Optional[int] = None
     title: Optional[str] = None
+    is_finished: Optional[bool] = None
 
 
 class LevelOrderField(str, Enum):
@@ -80,3 +81,13 @@ class ResponseSchema(GenericModel, Generic[T]):
     status: str
     message: str
     result: Optional[T]
+
+
+class StatSchema(BaseModel):
+    id: Optional[int] = None
+    right_answers_count: Optional[int] = None
+    all_answers_count: Optional[int] = None
+    level_id: Optional[int] = None
+
+    class Config:
+        from_attributes = True
