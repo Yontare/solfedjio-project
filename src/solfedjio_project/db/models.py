@@ -31,6 +31,7 @@ class Task(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str] = mapped_column(nullable=True)
+    description: Mapped[str] = mapped_column(nullable=True)
     type: Mapped[TaskType] = mapped_column(nullable=False, default=TaskType.one)
     attachments: Mapped[List["Attachment"]] = relationship(cascade="all, delete-orphan", lazy="selectin")
     answers: Mapped[List["Answer"]] = relationship(cascade="all, delete-orphan", lazy="selectin")
