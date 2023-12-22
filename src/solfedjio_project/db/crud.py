@@ -1,4 +1,4 @@
-from sqlalchemy import select, text, exists, and_, func
+from sqlalchemy import select, text, exists, and_, func, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.db_config import User
@@ -86,6 +86,7 @@ async def delete_task(task_id: int, session: AsyncSession):
 
 
 async def create_stat(stat_schema: StatSchema, user: User, session: AsyncSession):
+    await session.execute(delete(Stat).where(and_(Stat.level_id == stat_schema.level_id, Stat.user_id == user.id)))
     stat = Stat(
         right_answers_count=stat_schema.right_answers_count,
         all_answers_count=stat_schema.all_answers_count,

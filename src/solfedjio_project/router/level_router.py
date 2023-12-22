@@ -5,6 +5,7 @@ from auth.auth import fastapi_users
 from db import crud
 from db.db_config import get_async_session, User
 from schema.schemas import RequestLevel, ResponseSchema, LevelSchema, LevelOrderField, TaskSchema
+import time
 
 level_router = APIRouter()
 current_user = fastapi_users.current_user()
@@ -40,6 +41,7 @@ async def get_by_id(level_id: int, session: AsyncSession = Depends(get_async_ses
 async def level_list(order: LevelOrderField, session: AsyncSession = Depends(get_async_session),
                      user: User = Depends(current_user)):
     levels = await crud.get_levels(order=order, user=user, session=session)
+    time.sleep(0.15)
     return ResponseSchema(code=200, status="OK", message="Success get data", result=levels)
 
 
