@@ -1,8 +1,9 @@
-from sqlalchemy import select, text
+from sqlalchemy import select, text, exists, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from db.models import Level, Task, Attachment, Answer
-from schema.schemas import ShortLevelSchema, LevelSchema, TaskSchema, LevelOrderField
+from db.db_config import User
+from db.models import Level, Task, Attachment, Answer, Stat
+from schema.schemas import ShortLevelSchema, LevelSchema, TaskSchema, LevelOrderField, StatSchema
 
 
 async def get_level_by_id(level_id: int, session: AsyncSession):
@@ -10,9 +11,11 @@ async def get_level_by_id(level_id: int, session: AsyncSession):
     return result.scalars().one()
 
 
-async def get_levels(order: LevelOrderField, session: AsyncSession):
+async def get_levels(order: LevelOrderField, user: User, session: AsyncSession):
     result = await session.execute(select(Level.id, Level.title).order_by(text(order)))
-    return [ShortLevelSchema(id=short_level[0], title=short_level[1]) for short_level in result.all()]
+    return [ShortLevelSchema(id=short_level[0], title=short_level[1],
+                             is_finished=await is_level_finished(short_level[0], user, session))
+            for short_level in result.all()]
 
 
 async def create_level(level_schema: LevelSchema, session: AsyncSession):
@@ -75,3 +78,30 @@ async def delete_task(task_id: int, session: AsyncSession):
     _task = await get_task_by_id(task_id, session)
     await session.delete(_task)
     await session.commit()
+
+
+async def create_stat(stat_schema: StatSchema, user: User, session: AsyncSession):
+    stat = Stat(
+        right_answers_count=stat_schema.right_answers_count,
+        all_answers_count=stat_schema.all_answers_count,
+        level_id=stat_schema.level_id,
+        user_id=user.id
+    )
+
+    session.add(stat)
+    await session.commit()
+    return stat
+
+
+async def is_level_finished(level_id: int, user: User, session: AsyncSession):
+    return await session.scalar(exists().where(and_(Stat.user_id == user.id, Stat.level_id == level_id)).select())
+
+
+async def get_stat_by_level_id(level_id: int, user: User, session: AsyncSession):
+    result = await session.execute(select(Stat).where(and_(Stat.level_id == level_id, Stat.user_id == user.id)))
+    return result.scalars().one()
+
+
+async def get_stat_by_user(user: User, session: AsyncSession):
+    result = await session.execute(select(Stat).where(Stat.user_id == user.id))
+    return [StatSchema.model_validate(stat) for stat in result.scalars()]

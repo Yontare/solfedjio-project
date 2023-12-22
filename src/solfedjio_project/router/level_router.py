@@ -32,7 +32,7 @@ async def get_by_id(level_id: int, session: AsyncSession = Depends(get_async_ses
 @level_router.get("/")
 async def level_list(order: LevelOrderField, session: AsyncSession = Depends(get_async_session),
                      user: User = Depends(current_user)):
-    levels = await crud.get_levels(order=order, session=session)
+    levels = await crud.get_levels(order=order, user=user, session=session)
     return ResponseSchema(code=200, status="OK", message="Success get data", result=levels)
 
 

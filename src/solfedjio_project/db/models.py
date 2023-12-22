@@ -54,3 +54,13 @@ class Answer(Base):
     text: Mapped[str]
     is_right: Mapped[bool]
     task_id: Mapped[int] = mapped_column(ForeignKey("task.id"))
+
+
+class Stat(Base):
+    __tablename__ = 'stat'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    right_answers_count: Mapped[int]
+    all_answers_count: Mapped[int]
+    level_id: Mapped[int] = mapped_column(ForeignKey("level.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
